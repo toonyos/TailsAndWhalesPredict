@@ -25,5 +25,5 @@ termcolor
 streamlit
 opencv-python
 pillow
-tensorflow.keras
-matplotlib.image
+tensorflow
+matplotlib
