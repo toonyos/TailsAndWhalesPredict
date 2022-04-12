@@ -23,7 +23,7 @@ memoized-property
 termcolor
 
 streamlit
-cv2
+opencv-python
 PIL
 tensorflow.keras
 matplotlib.image
