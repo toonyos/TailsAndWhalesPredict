@@ -1,58 +1,116 @@
 import streamlit as st
-import numpy as np
-import cv2
-import matplotlib.image as mpimg
-from PIL import Image
+import matplotlib.pyplot as plt
+import requests
 
-from tensorflow.keras.models import load_model
-from tensorflow.keras.applications.vgg16 import preprocess_input
+URI = "" # A redefinir selon GCP bucket
 
 
+def print_plot(result):
 
-# def predict_class(image):
-#     classifier_model = tf.keras.models.load_model(path)
-#     shape = ((64, 64, 3))
-#     model = tf.keras.Sequential([hub.KerasLayer(classifier_model, input_shape=shape)])
-#     test_image = image.resize((64, 64))
-#     test_image = preprocessing.image.img_to_array(test_image)
-#     #test_image = test_image/255.0
-#     normalize_data_train(test_image)
+    fig, ax = plt.subplots()
+    #fig, ax = plt.subplots(figsize=(10,3))
 
+    ax.bar(['whale', 'dolphin', 'beluga'], result["prediction"])
+    ax.set_xlabel('Class')
+    ax.set_ylabel('Prediction')
 
-def load_trained_model(model):
-  path = "../raw_data/"
-  #print (path + model)
-  reconstructed_model = load_model(path + model + "/")
-  return reconstructed_model
-
-reconstructed_model = load_trained_model('model_7')
-
-#Title of the app
-st.title("HappyWhale : app to classify whale, dolphin and beluga")
+    st.pyplot(fig)
 
 
-img_1 = Image.open('../raw_data/image/1c342cdd745998.jpg')
+#def print_metric(result):
 
-print(type(img_1))
-st.title("Here is the image selected")
 
-st.image(img_1)
-print(f"img_1 ----------------{type(img_1)}")
+st.markdown("""
+    # TAILS AND WHALES MAKE HAPPYWHALE
+    [People behind the dataset](https://www.happywhale.com/home)
+    - bullet points
 
-bouton1 = st.button(label='Predict')
+    ## PART1: GET CONFIDENT WITH THE MODEL
 
-if bouton1:
-    img = mpimg.imread('../raw_data/image/1c342cdd745998.jpg')
-    print(f"A ----------------{type(img)}")
-    img = cv2.resize(img, dsize=(64, 64), interpolation= cv2.INTER_LINEAR)
+    **bold** or *italic* text with [links](https://www.happywhale.com/home) and:
+    - bullet points
+""")
 
-    X = np.array(img)
-    print(f"B ----------------{X}")
-    X = preprocess_input(X)
-    print(f"C ----------------{X}")
-    X = np.expand_dims(X, axis=0)
 
-    print(f"----------------{X.shape}")
+col1, col2 = st.columns([2, 2])
 
-    prediction = reconstructed_model.predict(X)
-    print(f"----------------{prediction}")
+col1.subheader("A Whale")
+with col1:
+    st.image('image/1c342cdd745998.jpg')
+    bouton_1 = st.button(label='Predict_1')
+
+col2.subheader("Prediction")
+with col2:
+    if bouton_1:
+        #model_predict('1c342cdd745998.jpg')
+        result = requests.get(URI+'1c342cdd745998.jpg')
+        print_plot(result)
+
+
+
+col3, col4 = st.columns([2, 2])
+
+col3.subheader("A Dolphin")
+with col3:
+    st.image('image/1c814b03d3e28d.jpg')
+    bouton_2 = st.button(label='Predict_2')
+
+col4.subheader("Prediction")
+with col4:
+    if bouton_2:
+        #model_predict('1c814b03d3e28d.jpg')
+        result = requests.get(URI+'1c814b03d3e28d.jpg')
+        print_plot(result)
+
+
+col5, col6 = st.columns([2, 2])
+
+col5.subheader("A Beluga")
+with col5:
+    st.image('image/1deb81035cb1d5.jpg')
+    bouton_3 = st.button(label='Predict_3')
+
+col6.subheader("Prediction")
+with col6:
+    if bouton_3:
+        #model_predict('1deb81035cb1d5.jpg')
+        result = requests.get(URI+'1deb81035cb1d5.jpg')
+        print_plot(result)
+
+
+st.markdown("""
+
+    ## PART2: GET IMPRESSED WITH THE MODEL
+
+    **bold** or *italic* text with [links](http://github.com/streamlit) and:
+    - bullet points
+""")
+
+col7, col8, col9 = st.columns(3)
+
+with col7:
+    st.header("What")
+    with st.expander("See Picture - Cropped"):
+        st.image('image/crop1.jpg')
+        bouton_4 = st.button(label='Predict_5')
+        if bouton_4:
+            #model_predict('/croped_img/crop1.jpg')
+            result = requests.get(URI+'crop1.jpg')
+
+with col8:
+    st.header("is this")
+    with st.expander("See Picture - Uncropped"):
+        st.image('image/uncropped.jpg')
+        bouton_5 = st.button(label='Predict_6')
+        if bouton_5:
+            #model_predict('/croped_img/uncropped.jpg')
+            result = requests.get(URI+'uncropped.jpg')
+
+with col9:
+    st.header("class?")
+    with st.expander("See Picture - Background"):
+        st.image('image/crop2.jpg')
+        bouton_6 = st.button(label='Predict_7')
+        if bouton_6:
+            #model_predict('/croped_img/crop2.jpg')
+            result = requests.get(URI+'crop2.jpg')
